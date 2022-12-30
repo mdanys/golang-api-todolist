@@ -20,7 +20,7 @@ func FailResponse(stat string, msg string) map[string]interface{} {
 	}
 }
 
-type DataResponse struct {
+type ActivityResponse struct {
 	ID        uint      `json:"id" form:"id"`
 	Title     string    `json:"title" form:"title"`
 	Email     string    `json:"email" form:"email"`
@@ -32,10 +32,10 @@ func ToResponse(core interface{}, code string) interface{} {
 	var res interface{}
 	switch code {
 	case "all":
-		var arr []DataResponse
+		var arr []ActivityResponse
 		cnv := core.([]activity.Core)
 		for _, val := range cnv {
-			arr = append(arr, DataResponse{
+			arr = append(arr, ActivityResponse{
 				ID:        val.ID,
 				Title:     val.Title,
 				Email:     val.Email,
@@ -46,7 +46,7 @@ func ToResponse(core interface{}, code string) interface{} {
 		res = arr
 	case "data":
 		cnv := core.(activity.Core)
-		res = DataResponse{
+		res = ActivityResponse{
 			ID:        cnv.ID,
 			Title:     cnv.Title,
 			Email:     cnv.Email,

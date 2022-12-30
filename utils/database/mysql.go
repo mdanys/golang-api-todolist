@@ -3,7 +3,8 @@ package database
 import (
 	"fmt"
 	"golang/config"
-	"golang/features/activity/repository"
+	ar "golang/features/activity/repository"
+	tr "golang/features/todo/repository"
 
 	"github.com/labstack/gommon/log"
 	"gorm.io/driver/mysql"
@@ -30,5 +31,6 @@ func InitDB(c *config.AppConfig) *gorm.DB {
 }
 
 func MigrateDB(db *gorm.DB) {
-	db.AutoMigrate(&repository.Data{})
+	db.AutoMigrate(&ar.Activity{})
+	db.AutoMigrate(&tr.Todo{})
 }

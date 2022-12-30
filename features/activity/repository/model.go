@@ -6,33 +6,33 @@ import (
 	"gorm.io/gorm"
 )
 
-type Data struct {
+type Activity struct {
 	gorm.Model
 	Title string
 	Email string
 }
 
-func FromCore(c activity.Core) Data {
-	return Data{
-		Model: gorm.Model{ID: c.ID, CreatedAt: c.CreatedAt, UpdatedAt: c.UpdatedAt},
-		Title: c.Title,
-		Email: c.Email,
+func FromCore(ac activity.Core) Activity {
+	return Activity{
+		Model: gorm.Model{ID: ac.ID, CreatedAt: ac.CreatedAt, UpdatedAt: ac.UpdatedAt},
+		Title: ac.Title,
+		Email: ac.Email,
 	}
 }
 
-func ToCore(d Data) activity.Core {
+func ToCore(a Activity) activity.Core {
 	return activity.Core{
-		ID:        d.ID,
-		Title:     d.Title,
-		Email:     d.Email,
-		CreatedAt: d.CreatedAt,
-		UpdatedAt: d.UpdatedAt,
+		ID:        a.ID,
+		Title:     a.Title,
+		Email:     a.Email,
+		CreatedAt: a.CreatedAt,
+		UpdatedAt: a.UpdatedAt,
 	}
 }
 
-func ToCoreArray(da []Data) []activity.Core {
+func ToCoreArray(aa []Activity) []activity.Core {
 	var arr []activity.Core
-	for _, val := range da {
+	for _, val := range aa {
 		arr = append(arr, activity.Core{
 			ID:        val.ID,
 			Title:     val.Title,
