@@ -25,7 +25,6 @@ func NewConfig() *AppConfig {
 	return cfg
 }
 
-// FUNC TO INITIALIZE CONFIG FROM ENVIRONMENT
 func initConfig() *AppConfig {
 	var app AppConfig
 
