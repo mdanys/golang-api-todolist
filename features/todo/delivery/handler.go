@@ -52,8 +52,9 @@ func (th *todoHandler) GetOne() echo.HandlerFunc {
 func (th *todoHandler) Create() echo.HandlerFunc {
 	return func(c echo.Context) error {
 		var input CreateFormat
-		err := c.Bind(&input)
-		if err != nil {
+		c.Bind(&input)
+
+		if input.Title == "" {
 			return c.JSON(http.StatusBadRequest, FailResponse("Bad Request", "title cannot be null"))
 		}
 
@@ -63,14 +64,14 @@ func (th *todoHandler) Create() echo.HandlerFunc {
 			return c.JSON(http.StatusInternalServerError, FailResponse("internal server error", "there is a problem on server"))
 		}
 
-		return c.JSON(http.StatusCreated, SuccessResponse("Success", "Success", ToResponse(res, "data")))
+		return c.JSON(http.StatusCreated, SuccessResponse("Success", "Success", ToResponse(res, "insert")))
 	}
 }
 
 func (th *todoHandler) Update() echo.HandlerFunc {
 	return func(c echo.Context) error {
 		var input UpdateFormat
-		if err := c.Bind(input); err != nil {
+		if err := c.Bind(&input); err != nil {
 			return c.JSON(http.StatusBadRequest, FailResponse("Bad Request", "title cannot be null"))
 		}
 
@@ -90,7 +91,7 @@ func (th *todoHandler) Update() echo.HandlerFunc {
 func (th *todoHandler) Delete() echo.HandlerFunc {
 	return func(c echo.Context) error {
 		var input DeleteFormat
-		if err := c.Bind(input); err != nil {
+		if err := c.Bind(&input); err != nil {
 			return c.JSON(http.StatusBadRequest, FailResponse("Bad Request", "title cannot be null"))
 		}
 
@@ -102,6 +103,6 @@ func (th *todoHandler) Delete() echo.HandlerFunc {
 			return c.JSON(http.StatusNotFound, FailResponse("Not Found", fmt.Sprintf("Todo with ID %d Not Found", cnv)))
 		}
 
-		return c.JSON(http.StatusOK, SuccessResponse("Success", "Success", ToResponse(res, "data")))
+		return c.JSON(http.StatusOK, SuccessResponse("Success", "Success", ToResponse(res, "delete")))
 	}
 }

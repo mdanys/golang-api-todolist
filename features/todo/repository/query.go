@@ -78,6 +78,11 @@ func (rq *repoQuery) Remove(id uint) (todo.Core, error) {
 		return todo.Core{}, err
 	}
 
+	if err := rq.db.Unscoped().First(&data, "id = ?", id).Error; err != nil {
+		log.Error("error on finding edit: ", err.Error())
+		return todo.Core{}, err
+	}
+
 	res := ToCore(data)
 	return res, nil
 }
