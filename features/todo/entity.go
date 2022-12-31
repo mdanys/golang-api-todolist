@@ -17,7 +17,7 @@ type Repository interface {
 	ShowOne(id uint) (Core, error)
 	Insert(data Core) (Core, error)
 	Edit(data Core, id uint) (Core, error)
-	Remove(id uint) error
+	Remove(id uint) (Core, error)
 }
 
 type Service interface {
@@ -25,5 +25,5 @@ type Service interface {
 	GetOne(id uint) (Core, error)
 	Create(data Core) (Core, error)
 	Update(data Core, id uint) (Core, error)
-	Delete(id uint) error
+	Delete(id uint) (Core, error)
 }

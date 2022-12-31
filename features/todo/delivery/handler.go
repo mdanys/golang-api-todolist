@@ -38,14 +38,11 @@ func (th *todoHandler) GetAll() echo.HandlerFunc {
 func (th *todoHandler) GetOne() echo.HandlerFunc {
 	return func(c echo.Context) error {
 		id := c.Param("id")
-		cnv, err := strconv.Atoi(id)
-		if err != nil {
-			return c.JSON(http.StatusNotFound, FailResponse("Not Found", fmt.Sprintf("Todo with ID %d Not Found", cnv)))
-		}
+		cnv, _ := strconv.Atoi(id)
 
 		res, err := th.srv.GetOne(uint(cnv))
 		if err != nil {
-			return c.JSON(http.StatusInternalServerError, FailResponse("internal server error", "there is a problem on server"))
+			return c.JSON(http.StatusNotFound, FailResponse("Not Found", fmt.Sprintf("Todo with ID %d Not Found", cnv)))
 		}
 
 		return c.JSON(http.StatusOK, SuccessResponse("Success", "Success", ToResponse(res, "data")))
@@ -78,15 +75,12 @@ func (th *todoHandler) Update() echo.HandlerFunc {
 		}
 
 		id := c.Param("id")
-		cnv, err := strconv.Atoi(id)
-		if err != nil {
-			return c.JSON(http.StatusNotFound, FailResponse("Not Found", fmt.Sprintf("Todo with ID %d Not Found", cnv)))
-		}
+		cnv, _ := strconv.Atoi(id)
 
 		conv := ToCore(input)
 		res, err := th.srv.Update(conv, uint(cnv))
 		if err != nil {
-			return c.JSON(http.StatusInternalServerError, FailResponse("internal server error", "there is a problem on server"))
+			return c.JSON(http.StatusNotFound, FailResponse("Not Found", fmt.Sprintf("Todo with ID %d Not Found", cnv)))
 		}
 
 		return c.JSON(http.StatusOK, SuccessResponse("Success", "Success", ToResponse(res, "data")))
@@ -101,16 +95,13 @@ func (th *todoHandler) Delete() echo.HandlerFunc {
 		}
 
 		id := c.Param("id")
-		cnv, err := strconv.Atoi(id)
+		cnv, _ := strconv.Atoi(id)
+
+		res, err := th.srv.Delete(uint(cnv))
 		if err != nil {
 			return c.JSON(http.StatusNotFound, FailResponse("Not Found", fmt.Sprintf("Todo with ID %d Not Found", cnv)))
 		}
 
-		er := th.srv.Delete(uint(cnv))
-		if er != nil {
-			return c.JSON(http.StatusInternalServerError, FailResponse("internal server error", "there is a problem on server"))
-		}
-
-		return c.JSON(http.StatusOK, SuccessResponse("Success", "Success", ToResponse(er, "data")))
+		return c.JSON(http.StatusOK, SuccessResponse("Success", "Success", ToResponse(res, "data")))
 	}
 }

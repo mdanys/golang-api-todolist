@@ -3,12 +3,12 @@ package delivery
 import "golang/features/activity"
 
 type CreateFormat struct {
-	Title string `json:"title" form:"title"`
-	Email string `json:"email" form:"email"`
+	Title string `json:"title" form:"title" binding:"required"`
+	Email string `json:"email" form:"email" binding:"required"`
 }
 
 type UpdateFormat struct {
-	Title string `json:"title" form:"title"`
+	Title string `json:"title" form:"title" binding:"required"`
 }
 
 func ToCore(i interface{}) activity.Core {

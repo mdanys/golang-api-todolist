@@ -28,6 +28,10 @@ type ActivityResponse struct {
 	UpdatedAt time.Time `json:"updatedAt" form:"updatedAt"`
 }
 
+type DeleteResponse struct {
+	ID uint `json:"-" form:"-"`
+}
+
 func ToResponse(core interface{}, code string) interface{} {
 	var res interface{}
 	switch code {
@@ -52,6 +56,11 @@ func ToResponse(core interface{}, code string) interface{} {
 			Email:     cnv.Email,
 			CreatedAt: cnv.CreatedAt,
 			UpdatedAt: cnv.UpdatedAt,
+		}
+	case "delete":
+		cnv := core.(activity.Core)
+		res = DeleteResponse{
+			ID: cnv.ID,
 		}
 	}
 

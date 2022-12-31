@@ -71,12 +71,13 @@ func (rq *repoQuery) Edit(data todo.Core, id uint) (todo.Core, error) {
 	return res, nil
 }
 
-func (rq *repoQuery) Remove(id uint) error {
+func (rq *repoQuery) Remove(id uint) (todo.Core, error) {
 	var data Todo
 	if err := rq.db.Delete(&data, "id = ?", id).Error; err != nil {
 		log.Error("error on remove: ", err.Error())
-		return err
+		return todo.Core{}, err
 	}
 
-	return nil
+	res := ToCore(data)
+	return res, nil
 }

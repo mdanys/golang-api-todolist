@@ -11,7 +11,6 @@ import (
 	"gorm.io/gorm"
 )
 
-// FUNC TO INITIALIZE DATABASE CONFIG
 func InitDB(c *config.AppConfig) *gorm.DB {
 	str := fmt.Sprintf("%s:%s@tcp(%s:%d)/%s?charset=utf8mb4&parseTime=True&loc=Local",
 		c.DBUser,

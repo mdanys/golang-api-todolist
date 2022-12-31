@@ -3,13 +3,13 @@ package delivery
 import "golang/features/todo"
 
 type CreateFormat struct {
-	Title           string `json:"title" form:"title"`
-	ActivityGroupID uint   `json:"activity_group_id" form:"activity_group_id"`
-	IsActive        bool   `json:"is_active" form:"is_active"`
+	Title           string `json:"title" form:"title" binding:"required"`
+	ActivityGroupID uint   `json:"activity_group_id" form:"activity_group_id" binding:"required"`
+	IsActive        bool   `json:"is_active" form:"is_active" binding:"required"`
 }
 
 type UpdateFormat struct {
-	Title    string `json:"title" form:"title"`
+	Title    string `json:"title" form:"title" binding:"required"`
 	Priority string `json:"priority" form:"priority"`
 	IsActive bool   `json:"is_active" form:"is_active"`
 	Status   string `json:"status" form:"status"`

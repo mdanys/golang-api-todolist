@@ -64,12 +64,18 @@ func (rq *repoQuery) Edit(data activity.Core, id uint) (activity.Core, error) {
 	return res, nil
 }
 
-func (rq *repoQuery) Remove(id uint) error {
+func (rq *repoQuery) Remove(id uint) (activity.Core, error) {
 	var data Activity
 	if err := rq.db.Delete(&data, "id = ?", id).Error; err != nil {
 		log.Error("error on remove: ", err.Error())
-		return err
+		return activity.Core{}, err
 	}
 
-	return nil
+	if err := rq.db.Unscoped().First(&data, "id = ?", id).Error; err != nil {
+		log.Error("error on finding edit: ", err.Error())
+		return activity.Core{}, err
+	}
+
+	res := ToCore(data)
+	return res, nil
 }

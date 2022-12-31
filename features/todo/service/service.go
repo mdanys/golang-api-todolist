@@ -47,11 +47,11 @@ func (ts *todoService) Update(data todo.Core, id uint) (todo.Core, error) {
 	return res, nil
 }
 
-func (ts *todoService) Delete(id uint) error {
-	err := ts.qry.Remove(id)
+func (ts *todoService) Delete(id uint) (todo.Core, error) {
+	res, err := ts.qry.Remove(id)
 	if err != nil {
-		return err
+		return todo.Core{}, err
 	}
 
-	return nil
+	return res, nil
 }

@@ -36,14 +36,11 @@ func (ah *activityHandler) GetAll() echo.HandlerFunc {
 func (ah *activityHandler) GetOne() echo.HandlerFunc {
 	return func(c echo.Context) error {
 		id := c.Param("id")
-		cnv, err := strconv.Atoi(id)
-		if err != nil {
-			return c.JSON(http.StatusNotFound, FailResponse("Not Found", fmt.Sprintf("Activity with ID %d Not Found", cnv)))
-		}
+		cnv, _ := strconv.Atoi(id)
 
 		res, err := ah.srv.GetOne(uint(cnv))
 		if err != nil {
-			return c.JSON(http.StatusInternalServerError, FailResponse("internal server error", "there is a problem on server"))
+			return c.JSON(http.StatusNotFound, FailResponse("Not Found", fmt.Sprintf("Activity with ID %d Not Found", cnv)))
 		}
 
 		return c.JSON(http.StatusOK, SuccessResponse("Success", "Success", ToResponse(res, "data")))
@@ -53,8 +50,9 @@ func (ah *activityHandler) GetOne() echo.HandlerFunc {
 func (ah *activityHandler) Create() echo.HandlerFunc {
 	return func(c echo.Context) error {
 		var input CreateFormat
-		err := c.Bind(&input)
-		if err != nil {
+		c.Bind(&input)
+
+		if input.Title == "" {
 			return c.JSON(http.StatusBadRequest, FailResponse("Bad Request", "title cannot be null"))
 		}
 
@@ -71,20 +69,19 @@ func (ah *activityHandler) Create() echo.HandlerFunc {
 func (ah *activityHandler) Update() echo.HandlerFunc {
 	return func(c echo.Context) error {
 		var input UpdateFormat
-		if err := c.Bind(input); err != nil {
+		c.Bind(&input)
+
+		if input.Title == "" {
 			return c.JSON(http.StatusBadRequest, FailResponse("Bad Request", "title cannot be null"))
 		}
 
 		id := c.Param("id")
-		cnv, err := strconv.Atoi(id)
-		if err != nil {
-			return c.JSON(http.StatusNotFound, FailResponse("Not Found", fmt.Sprintf("Activity with ID %d Not Found", cnv)))
-		}
+		cnv, _ := strconv.Atoi(id)
 
 		conv := ToCore(input)
 		res, err := ah.srv.Update(conv, uint(cnv))
 		if err != nil {
-			return c.JSON(http.StatusInternalServerError, FailResponse("internal server error", "there is a problem on server"))
+			return c.JSON(http.StatusNotFound, FailResponse("Not Found", fmt.Sprintf("Activity with ID %d Not Found", cnv)))
 		}
 
 		return c.JSON(http.StatusOK, SuccessResponse("Success", "Success", ToResponse(res, "data")))
@@ -94,16 +91,13 @@ func (ah *activityHandler) Update() echo.HandlerFunc {
 func (ah *activityHandler) Delete() echo.HandlerFunc {
 	return func(c echo.Context) error {
 		id := c.Param("id")
-		cnv, err := strconv.Atoi(id)
+		cnv, _ := strconv.Atoi(id)
+
+		res, err := ah.srv.Delete(uint(cnv))
 		if err != nil {
 			return c.JSON(http.StatusNotFound, FailResponse("Not Found", fmt.Sprintf("Activity with ID %d Not Found", cnv)))
 		}
 
-		er := ah.srv.Delete(uint(cnv))
-		if er != nil {
-			return c.JSON(http.StatusInternalServerError, FailResponse("internal server error", "there is a problem on server"))
-		}
-
-		return c.JSON(http.StatusOK, SuccessResponse("Success", "Success", ToResponse(er, "data")))
+		return c.JSON(http.StatusOK, SuccessResponse("Success", "Success", ToResponse(res, "delete")))
 	}
 }

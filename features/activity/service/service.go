@@ -46,11 +46,11 @@ func (as *activityService) Update(data activity.Core, id uint) (activity.Core, e
 	return res, nil
 }
 
-func (as *activityService) Delete(id uint) error {
-	err := as.qry.Remove(id)
+func (as *activityService) Delete(id uint) (activity.Core, error) {
+	res, err := as.qry.Remove(id)
 	if err != nil {
-		return err
+		return activity.Core{}, err
 	}
 
-	return nil
+	return res, nil
 }
