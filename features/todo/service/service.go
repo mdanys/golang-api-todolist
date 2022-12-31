@@ -29,6 +29,7 @@ func (ts *todoService) GetOne(id uint) (todo.Core, error) {
 }
 
 func (ts *todoService) Create(data todo.Core) (todo.Core, error) {
+	data.IsActive = true
 	data.Priority = "very-high"
 	res, err := ts.qry.Insert(data)
 	if err != nil {

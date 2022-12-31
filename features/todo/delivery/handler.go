@@ -56,6 +56,8 @@ func (th *todoHandler) Create() echo.HandlerFunc {
 
 		if input.Title == "" {
 			return c.JSON(http.StatusBadRequest, FailResponse("Bad Request", "title cannot be null"))
+		} else if input.ActivityGroupID == 0 {
+			return c.JSON(http.StatusBadRequest, FailResponse("Bad Request", "activity_group_id cannot be null"))
 		}
 
 		cnv := ToCore(input)

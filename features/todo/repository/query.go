@@ -18,7 +18,7 @@ func New(db *gorm.DB) todo.Repository {
 func (rq *repoQuery) ShowAll(query string) ([]todo.Core, error) {
 	var resQry []Todo
 	if query != "" {
-		if err := rq.db.Where("activity_group_id LIKE %?%", query).Find(&resQry).Error; err != nil {
+		if err := rq.db.Where("activity_group_id = ?", query).Find(&resQry).Error; err != nil {
 			log.Error("error on show all: ", err.Error())
 			return nil, err
 		}
