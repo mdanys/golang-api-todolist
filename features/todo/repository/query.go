@@ -20,12 +20,12 @@ func (rq *repoQuery) ShowAll(query string) ([]todo.Core, error) {
 	if query != "" {
 		if err := rq.db.Where("activity_group_id = ?", query).Find(&resQry).Error; err != nil {
 			log.Error("error on show all: ", err.Error())
-			return nil, err
+			return []todo.Core{}, err
 		}
 	} else {
 		if err := rq.db.Find(&resQry).Error; err != nil {
 			log.Error("error on show all: ", err.Error())
-			return nil, err
+			return []todo.Core{}, err
 		}
 	}
 

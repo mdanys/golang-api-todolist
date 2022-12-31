@@ -49,16 +49,20 @@ func ToResponse(core interface{}, code string) interface{} {
 	case "all":
 		var arr []TodoResponse
 		cnv := core.([]todo.Core)
-		for _, val := range cnv {
-			arr = append(arr, TodoResponse{
-				ID:              val.ID,
-				ActivityGroupID: val.ActivityGroupID,
-				Title:           val.Title,
-				IsActive:        val.IsActive,
-				Priority:        val.Priority,
-				CreatedAt:       val.CreatedAt,
-				UpdatedAt:       val.UpdatedAt,
-			})
+		if len(cnv) == 0 {
+			arr = make([]TodoResponse, 0)
+		} else {
+			for _, val := range cnv {
+				arr = append(arr, TodoResponse{
+					ID:              val.ID,
+					ActivityGroupID: val.ActivityGroupID,
+					Title:           val.Title,
+					IsActive:        val.IsActive,
+					Priority:        val.Priority,
+					CreatedAt:       val.CreatedAt,
+					UpdatedAt:       val.UpdatedAt,
+				})
+			}
 		}
 		res = arr
 	case "data":
